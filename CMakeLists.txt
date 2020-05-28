@@ -2,8 +2,10 @@ cmake_minimum_required(VERSION 3.5.0)
 
 project(Poco)
 
+# 从文件读取共享库版本
 file(STRINGS "${PROJECT_SOURCE_DIR}/libversion" SHARED_LIBRARY_VERSION)
 # Read the version information from the VERSION file
+# 解析版本号，存储变量
 file(STRINGS "${PROJECT_SOURCE_DIR}/VERSION" PACKAGE_VERSION)
 string(REGEX REPLACE "([0-9]+)\\.[0-9]+\\.[0-9]+.*" "\\1" CPACK_PACKAGE_VERSION_MAJOR ${PACKAGE_VERSION})
 string(REGEX REPLACE "[0-9]+\\.([0-9]+)\\.[0-9]+.*" "\\1" CPACK_PACKAGE_VERSION_MINOR ${PACKAGE_VERSION})
@@ -16,14 +18,17 @@ set(RELEASE_NAME "Unstable-trunk")
 # top of the build tree rather than in hard-to-find leaf
 # directories. This simplifies manual testing and the use of the build
 # tree rather than installed Boost libraries.
+# 设置lib和bin的输出目录，方便查找
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 # Windows DLLs are "runtime" for CMake. Output them to "bin" like the Visual Studio projects do.
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 # Append our module directory to CMake
+# 附加我们的模块目录到cmake
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
+# 根据cmake版本 确定增加的cmake模块路径
 if(CMAKE_VERSION VERSION_LESS "3.10")
 	list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/V39)
 endif()
@@ -32,10 +37,11 @@ if(CMAKE_VERSION VERSION_LESS "3.14")
 endif()
 #################################################################################
 # Setup C/C++ compiler options
+# 设置 C/C++ 编译选项
 #################################################################################
 
 # C++11/14 compiler flags
-include(CXX1x)
+include(CXX1x)	# include 会加入CXX1x 模块，展开并执行
 check_for_cxx14_compiler(CXX14_COMPILER)
 
 # If a C++14 compiler is available, then set the appropriate flags
@@ -51,9 +57,10 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 
 # Include some common macros to simpilfy the Poco CMake files
+# 包含一些通用的宏，简化 poco CMake 文件
 include(PocoMacros)
 
-if(POCO_STATIC)
+if(POCO_STATIC)	# 这个开关从哪里来的？
 	message(WARNING "POCO_STATIC has been deprecated. Please use BUILD_SHARED_LIBS instead.")
 	option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
 else()
@@ -86,7 +93,7 @@ else()
 	find_package(OpenSSL)
 endif()
 
-if(OPENSSL_FOUND)
+if(OPENSSL_FOUND)		# 如果查找到了openssl库，则显示这些选项
 	option(ENABLE_NETSSL "Enable NetSSL" ON)
 	option(ENABLE_CRYPTO "Enable Crypto" ON)
 	option(ENABLE_JWT "Enable JWT" ON)
@@ -96,8 +103,8 @@ else()
 	option(ENABLE_JWT "Enable JWT" OFF)
 endif()
 
-if(ENABLE_APACHECONNECTOR)
-	find_package(APR REQUIRED)
+if(ENABLE_APACHECONNECTOR)	# 如果开启 apache 连接，则查找下面这些库
+	find_package(APR REQUIRED)		# 必须查找到
 	find_package(APRUTIL REQUIRED)
 	find_package(Apache2 REQUIRED)
 else()
@@ -113,6 +120,7 @@ else()
 	option(ENABLE_APACHECONNECTOR "Enable ApacheConnector" OFF)
 endif()
 
+# 如果启用 MySQL，则查找库
 if(ENABLE_DATA_MYSQL)
 	find_package(MySQL REQUIRED)
 else()
@@ -127,6 +135,7 @@ else()
 	option(ENABLE_DATA_MYSQL "Enable Data MySQL or MariaDB" OFF)
 endif()
 
+#如果启用 POSTGRESQL
 if(ENABLE_DATA_POSTGRESQL)
 	find_package(PostgreSQL REQUIRED)
 else()
@@ -141,6 +150,7 @@ else()
 	option(ENABLE_DATA_POSTGRESQL "Enable SQL PosgreSQL" OFF)
 endif()
 
+# 如果启用ODBC
 if(ENABLE_DATA_ODBC)
 	find_package(ODBC REQUIRED)
 else()
@@ -156,6 +166,7 @@ else()
 endif()
 
 # Allow enabling and disabling components
+# 允许启用和禁用的组件
 option(ENABLE_FOUNDATION "Enable Foundation, required by all components except CppUnit" ON)
 option(ENABLE_ENCODINGS "Enable Encodings" ON)
 option(ENABLE_ENCODINGS_COMPILER "Enable Encodings Compiler" OFF)
@@ -195,10 +206,13 @@ else()
 	message(STATUS "Using internal sqlite, zlib, pcre, expat, ...")
 endif()
 
+# 执行定义平台规格
 include(DefinePlatformSpecifc)
 
 # Collect the built libraries and include dirs, the will be used to create the PocoConfig.cmake file
-set(Poco_COMPONENTS "")
+# 收集构建的lib库和include目录， 它们将被用于创建 PocoConfig.cmake 文件
+
+set(Poco_COMPONENTS "") # Poco_COMPONENTS 记录所有的组件
 
 if(ENABLE_TESTS)
 	add_subdirectory(CppUnit)
@@ -405,6 +419,7 @@ endif()
 
 #############################################################
 # Uninstall stuff see: http://www.vtk.org/Wiki/CMake_FAQ
+# 卸载
 configure_file(
 	"${CMAKE_CURRENT_SOURCE_DIR}/cmake/cmake_uninstall.cmake.in"
 	"${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake"
@@ -416,7 +431,7 @@ add_custom_target(uninstall
 
 #############################################################
 # Enable packaging
-
+# 打包？
 include(InstallRequiredSystemLibraries)
 
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Poco Libraries")
