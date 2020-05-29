@@ -186,9 +186,11 @@ option(ENABLE_POCODOC "Enable Poco Documentation Generator" OFF)
 option(ENABLE_PAGECOMPILER "Enable PageCompiler" ON)
 option(ENABLE_PAGECOMPILER_FILE2PAGE "Enable File2Page" ON)
 
+# 测试开关
 option(ENABLE_TESTS
 	"Set to OFF|ON (default is OFF) to control build of POCO tests & samples" OFF)
 
+# 非捆绑 开关
 option(POCO_UNBUNDLED
 	"Set to OFF|ON (default is OFF) to control linking dependencies as external" OFF)
 
@@ -203,7 +205,7 @@ endif()
 if(POCO_UNBUNDLED)
 	message(STATUS "Using external sqlite, zlib, pcre, expat, ...")
 else()
-	message(STATUS "Using internal sqlite, zlib, pcre, expat, ...")
+	message(STATUS "Using internal sqlite, zlib, pcre, expat, ...")		# 内部sqlite zlib pcre expat
 endif()
 
 # 执行定义平台规格
@@ -472,6 +474,7 @@ install(
 		Devel
 )
 
+# 安装啥？ 
 if(POCO_UNBUNDLED)
 	install(FILES cmake/FindPCRE.cmake
 			DESTINATION "${PocoConfigPackageLocation}")
@@ -481,17 +484,24 @@ if(POCO_UNBUNDLED)
 			DESTINATION "${PocoConfigPackageLocation}/V313")
 endif()
 
+# 输出cmake 版本， 项目名称， 项目生成工具
+# CMake 3.15.0-rc4 successfully configured Poco using Visual Studio 14 2015 generator
 message(STATUS "CMake ${CMAKE_VERSION} successfully configured ${PROJECT_NAME} using ${CMAKE_GENERATOR} generator")
+# Poco package version: 1.10.1
 message(STATUS "${PROJECT_NAME} package version: ${PROJECT_VERSION}")
+
 if(BUILD_SHARED_LIBS)
 	message(STATUS "Building dynamic libraries")
 else()
 	message(STATUS "Building static libraries")
 endif()
+
 message(STATUS "[cmake] Installation target path: ${CMAKE_INSTALL_PREFIX}")
+
 if(CMAKE_TOOLCHAIN_FILE)
 	message(STATUS "[cmake] Use toolchain file:		${CMAKE_TOOLCHAIN_FILE}")
 endif()
+
 message(STATUS "[cmake] Bulid for OS type:		${CMAKE_SYSTEM_NAME}")
 message(STATUS "[cmake] Build for OS version:	${CMAKE_SYSTEM_VERSION}")
 message(STATUS "[cmake] Build for CPU type:		${CMAKE_SYSTEM_PROCESSOR}")
