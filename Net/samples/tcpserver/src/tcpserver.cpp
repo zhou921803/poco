@@ -85,12 +85,12 @@ int main(int argc, char** argv)
 		Poco::UInt16 port = NumberParser::parse((argc > 1) ? argv[1] : "2001");
 
 		TCPServer srv(new TCPFactory(), port);
-		srv.start();
+		srv.start();  // 这里会创建一个子线程提供服务
 
 		std::cout << "TCP server listening on port " << port << '.'
 			 << std::endl << "Press Ctrl-C to quit." << std::endl;
 
-		terminator.wait();
+		terminator.wait();	// 主线程等待结束事件
 	}
 	catch (Exception& exc)
 	{

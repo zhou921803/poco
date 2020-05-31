@@ -324,12 +324,12 @@ void Application::stopOptionsProcessing()
 int Application::run()
 {
 	int rc = EXIT_CONFIG;
-	initialize(*this);
+	initialize(*this);	// 初始化
 
 	try
 	{
 		rc = EXIT_SOFTWARE;
-		rc = main(_unprocessedArgs);
+		rc = main(_unprocessedArgs);	// main
 	}
 	catch (Poco::Exception& exc)
 	{
