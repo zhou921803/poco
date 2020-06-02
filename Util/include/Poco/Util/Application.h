@@ -376,31 +376,31 @@ private:
 	bool findAppConfigFile(const std::string& appName, const std::string& extension, Poco::Path& path) const;
 	bool findAppConfigFile(const Path& basePath, const std::string& appName, const std::string& extension, Poco::Path& path) const;
 
-	typedef LayeredConfiguration::Ptr ConfigPtr;
+	typedef LayeredConfiguration::Ptr ConfigPtr;	// 分层的配置
 	typedef Poco::Logger::Ptr LoggerPtr;
 
-	ConfigPtr       _pConfig;
-	SubsystemVec    _subsystems;
-	bool            _initialized;
-	std::string     _command;
-	ArgVec          _argv;
-	ArgVec          _unprocessedArgs;
-	OptionSet       _options;
-	bool            _unixOptions;
-	Logger*           _pLogger;
-	Poco::Timestamp _startTime;
-	bool            _stopOptionsProcessing;
+	ConfigPtr       _pConfig;		// 配置对象指针
+	SubsystemVec    _subsystems;	// 子系统指针列表
+	bool            _initialized;	// 是否初始化
+	std::string     _command;		//
+	ArgVec          _argv;			// 参数列表
+	ArgVec          _unprocessedArgs;	// 未处理的参数列表
+	OptionSet       _options;		// 选项集合
+	bool            _unixOptions;	
+	Logger*           _pLogger;		// 日志记录器
+	Poco::Timestamp _startTime;		// 时间戳
+	bool            _stopOptionsProcessing;	// 停止选项处理
 
 #if defined(POCO_OS_FAMILY_UNIX) && !defined(POCO_VXWORKS)
 	std::string _workingDirAtLaunch;
 #endif
 
-	static Application* _pInstance;
+	static Application* _pInstance;	// 静态Application对象指针
 
 	friend class LoggingSubsystem;
 
-	Application(const Application&);
-	Application& operator = (const Application&);
+	Application(const Application&);	// 不允许拷贝构造
+	Application& operator = (const Application&);	// 不允许赋值构造
 };
 
 

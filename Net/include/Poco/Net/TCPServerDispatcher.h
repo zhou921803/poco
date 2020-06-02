@@ -108,10 +108,10 @@ private:
 	int  _maxConcurrentConnections;
 	int  _refusedConnections;
 	bool _stopped;
-	Poco::NotificationQueue         _queue;
-	TCPServerConnectionFactory::Ptr _pConnectionFactory;
-	Poco::ThreadPool&               _threadPool;
-	mutable Poco::FastMutex         _mutex;
+	Poco::NotificationQueue         _queue;			// 通知队列？
+	TCPServerConnectionFactory::Ptr _pConnectionFactory;	// 连接对象创建工厂
+	Poco::ThreadPool&               _threadPool;	// 处理socket连接的线程池
+	mutable Poco::FastMutex         _mutex;			// 互斥体
 };
 
 

@@ -223,10 +223,10 @@ private:
 	TCPServer(const TCPServer&);
 	TCPServer& operator = (const TCPServer&);
 	
-	ServerSocket _socket;
-	TCPServerDispatcher* _pDispatcher;
-	TCPServerConnectionFilter::Ptr _pConnectionFilter;
-	Poco::Thread _thread;
+	ServerSocket _socket;	// 服务socket信息
+	TCPServerDispatcher* _pDispatcher;	// 派遣连接
+	TCPServerConnectionFilter::Ptr _pConnectionFilter;	// 连接过滤器
+	Poco::Thread _thread;	// 线程对象
 	bool _stopped;
 };
 

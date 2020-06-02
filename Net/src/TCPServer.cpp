@@ -130,13 +130,13 @@ void TCPServer::run()
 		Poco::Timespan timeout(250000);
 		try
 		{
-			if (_socket.poll(timeout, Socket::SELECT_READ))
+			if (_socket.poll(timeout, Socket::SELECT_READ))	// serverSocket 轮询可读状态
 			{
 				try
 				{
-					StreamSocket ss = _socket.acceptConnection();
+					StreamSocket ss = _socket.acceptConnection();	// 服务socket 接受连接，返回用户的socket流对象
 					
-					if (!_pConnectionFilter || _pConnectionFilter->accept(ss))
+					if (!_pConnectionFilter || _pConnectionFilter->accept(ss))	// socket 过滤
 					{
 						// enable nodelay per default: OSX really needs that
 #if defined(POCO_OS_FAMILY_UNIX)
@@ -145,7 +145,7 @@ void TCPServer::run()
 						{
 							ss.setNoDelay(true);
 						}
-						_pDispatcher->enqueue(ss);
+						_pDispatcher->enqueue(ss);	// 客户socket 进入队列
 					}
 				}
 				catch (Poco::Exception& exc)
